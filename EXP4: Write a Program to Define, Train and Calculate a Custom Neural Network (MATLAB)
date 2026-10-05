@@ -1,0 +1,51 @@
+Aim: To define a custom Artificial Neural Network (ANN), train it using sample data, and
+calculate the network output using MATLAB.
+
+clc;
+clear;
+close all;
+
+% Input Data
+P = [1 2 3 4 5;
+    2 4 6 8 10];
+
+% Target Data
+T = [3 6 9 12 15];
+
+% Create Feedforward Neural Network (10 hidden neurons)
+net = feedforwardnet(10);
+
+% Train the Network
+[net, tr] = train(net, P, T);
+
+% Test the Network
+Y = net(P);
+
+% Display Results
+disp('Target Output:');
+disp(T);
+
+disp('Predicted Output:');
+disp(Y);
+
+% Calculate Mean Squared Error
+mseError = perform(net, T, Y);
+
+disp('Mean Squared Error (MSE):');
+disp(mseError);
+
+% Performance Graph
+figure;
+plotperform(tr);
+
+% Regression Graph
+figure;
+plotregression(T, Y);
+
+% Error Histogram
+figure;
+ploterrhist(T - Y);
+
+% Training State
+figure;
+plottrainstate(tr);
