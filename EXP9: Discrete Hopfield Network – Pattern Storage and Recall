@@ -1,0 +1,75 @@
+Aim:To implement a Discrete Hopfield Network in MATLAB for storing the binary pattern (1 1 1 0) and retrieving the original pattern when the test input contains mistakes in the first and second positions.
+
+clc;
+clear;
+close all;
+
+%% Stored Pattern
+pattern = [1 1 1 0];
+
+disp('Stored Pattern:');
+disp(pattern);
+
+%% Convert to Bipolar
+bipolar_pattern = 2*pattern - 1;
+
+disp('Bipolar Stored Pattern:');
+disp(bipolar_pattern);
+
+%% Weight Matrix (Hebbian Learning)
+W = bipolar_pattern' * bipolar_pattern;
+
+% Remove self-connections
+W = W - diag(diag(W));
+
+disp('Weight Matrix:');
+disp(W);
+
+%% Noisy Input Pattern
+test_pattern = [0 0 1 0];
+
+disp('Input Pattern with Mistakes:');
+disp(test_pattern);
+
+%% Convert to Bipolar
+x = (2*test_pattern - 1)';
+
+disp('Bipolar Input:');
+disp(x');
+
+%% Hopfield Recall (Iterative Update)
+maxIter = 10;
+
+for iter = 1:maxIter
+    x_old = x;
+
+    for i = 1:length(x)
+        net = W(i,:) * x;
+
+        if net >= 0
+            x(i) = 1;
+        else
+            x(i) = -1;
+        end
+    end
+
+    % Stop if pattern doesn't change
+    if isequal(x, x_old)
+        break;
+    end
+end
+
+%% Display Results
+disp('Recovered Bipolar Pattern:');
+disp(x');
+
+recovered = (x' + 1)/2;
+
+disp('Recovered Binary Pattern:');
+disp(recovered);
+
+if isequal(recovered, pattern)
+    disp('Stored pattern successfully recalled.');
+else
+    disp('Pattern is not completely recalled.');
+end
