@@ -1,0 +1,60 @@
+Aim: To implement a simple Artificial Neuron using the weighted sum model and
+activation functions, and to calculate and plot the neuron's output for different input
+values.
+clc;
+clear;
+close all;
+
+%Input values
+x = -10:0.5:10;
+
+%Weight and Bias
+w = 1.5;
+b = -2;
+
+%Net Input
+net = w*x + b;
+
+%% Step Activation Function
+step_output = double(net >= 0);
+
+%% Sigmoid Activation Function
+sigmoid_output = 1 ./ (1 + exp(-net));
+
+%% ReLU Activation Function
+relu_output = max(0, net);
+
+%%Plotting
+
+figure;
+
+subplot(3,1,1);
+plot(x, step_output, 'b','LineWidth',2);
+grid on;
+title('Step Activation Fucntion');
+xlabel('Input');
+ylabel('Output');
+
+subplot(3,1,2);
+plot(x, sigmoid_output, 'r', 'LineWidth', 2);
+grid on;
+title('Sigmoid Activation Function');
+xlabel('Input');
+ylabel('Output');
+
+subplot(3,1,3);
+plot(x, relu_output, 'g', 'LineWidth', 2);
+grid on;
+title('ReLU Activation Function');
+xlabel('Input');
+ylabel('Output');
+
+%%Display Sample Outputs
+
+disp(' Input  Net Input  Step  Sigmoid  ReLU');
+disp('----------------------------------------------------------');
+
+for i = 1:length(x)
+    fprintf('%6.1f %10.2f %8.0f %10.4f %8.2f\n', ...
+        x(i), net(i), step_output(i), sigmoid_output(i), relu_output(i));
+end
