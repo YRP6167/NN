@@ -1,0 +1,62 @@
+Aim: To implement the XOR (Exclusive-OR) function using a Multilayer Perceptron (MLP) trained with the
+Backpropagation algorithm incorporating a momentum factor.
+
+
+clc;
+clear;
+close all;
+
+fprintf('XOR USING BACKPROPAGATION WITH MOMENTUM\n');
+fprintf('=======================================\n\n');
+
+% XOR Inputs
+P = [0 0 1 1;
+    0 1 0 1];
+
+% Target Outputs
+T = [0 1 1 0];
+
+% Create Neural Network
+net = feedforwardnet(2,'traingdx');
+
+% Training parameters
+net.trainParam.lr = 0.5;
+net.trainParam.mc = 0.9;
+net.trainParam.epochs = 10000;
+net.trainParam.goal = 0.001;
+
+% Sigmoid activation
+net.layers{1}.transferFcn = 'logsig';
+net.layers{2}.transferFcn = 'logsig';
+
+% Train Network
+[net,tr] = train(net,P,T);
+
+% Test Network
+Y = net(P);
+
+% Binary Output
+Y_binary = Y >= 0.5;
+
+fprintf('Input1  Input2  Target  Output  Binary\n');
+fprintf('--------------------------------------\n');
+
+for i = 1:4
+    fprintf('%5d %7d %7d %8.4f %7d\n', ...
+        P(1,i),P(2,i),T(i),Y(i),Y_binary(i));
+end
+
+% Performance
+mse = perform(net,T,Y);
+
+fprintf('\nMean Squared Error = %.6f\n',mse);
+
+figure;
+plotperform(tr);
+title('Training Performance');
+
+figure;
+plotconfusion(T,Y_binary);
+title('Confusion Matrix');
+
+fprintf('\nTraining Completed Successfully.\n');
