@@ -1,0 +1,83 @@
+clc; clear; close all;
+X = [0 0; 0 1; 1 0; 1 1]; 
+fprintf('--- McCulloch-Pitts Logic Gates (Weights & Thresholds) ---\n\n');
+
+%% 1. AND Gate Implementation
+w_and = [1, 1];
+theta_and = 2;
+y_and = zeros(4,1);
+for i = 1:4
+    net_input = X(i,1)*w_and(1) + X(i,2)*w_and(2); 
+    if net_input >= theta_and
+        y_and(i) = 1;
+    else
+        y_and(i) = 0;
+    end
+end
+disp('AND Gate Truth Table:');
+disp([X, y_and]);
+
+%% 2. OR Gate Implementation
+w_or = [1, 1];
+theta_or = 1;
+y_or = zeros(4,1);
+for i = 1:4
+    net_input = X(i,1)*w_or(1) + X(i,2)*w_or(2); 
+    if net_input >= theta_or
+        y_or(i) = 1;
+    else
+        y_or(i) = 0;
+    end
+end
+disp('OR Gate Truth Table:');
+disp([X, y_or]);
+
+%% 3. NOT Gate Implementation
+X_not = [0; 1];
+w_not = -1; 
+theta_not = 0;
+y_not = zeros(2,1);
+for i = 1:2
+    net_input = X_not(i)*w_not;
+    if net_input >= theta_not
+        y_not(i) = 1;
+    else
+        y_not(i) = 0;
+    end
+end
+disp('NOT Gate Truth Table:');
+disp([X_not, y_not]);
+
+%% 4. XOR Gate Implementation (Multi-layer)
+% We combine two hidden neurons (Z1 and Z2) to feed the final output (Y)
+y_xor = zeros(4,1);
+for i = 1:4
+    x1 = X(i,1);
+    x2 = X(i,2);
+    
+    % Neuron Z1: x1 AND NOT x2 -> weights = [1, -2], threshold = 1
+    net_z1 = x1*(1) + x2*(-2);
+    if net_z1 >= 1
+        z1 = 1;
+    else
+        z1 = 0;
+    end
+    
+    % Neuron Z2: x2 AND NOT x1 -> weights = [-2, 1], threshold = 1
+    net_z2 = x1*(-2) + x2*(1);
+    if net_z2 >= 1
+        z2 = 1;
+    else
+        z2 = 0;
+    end
+    
+    % Final Output Neuron Y: z1 OR z2 -> weights = [1, 1], threshold = 1
+    net_y = z1*(1) + z2*(1);
+    if net_y >= 1
+        y_xor(i) = 1;
+    else
+        y_xor(i) = 0;
+    end
+end
+disp('XOR Gate Truth Table:');
+disp([X, y_xor]);
