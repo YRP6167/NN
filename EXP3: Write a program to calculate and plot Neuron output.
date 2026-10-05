@@ -1,6 +1,7 @@
 Aim: To implement a simple Artificial Neuron using the weighted sum model and
 activation functions, and to calculate and plot the neuron's output for different input
 values.
+
 clc;
 clear;
 close all;
